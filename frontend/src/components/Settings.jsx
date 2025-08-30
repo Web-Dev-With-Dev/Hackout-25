@@ -77,14 +77,12 @@ const Settings = () => {
   };
 
   const handleSave = () => {
-    // In real app, this would save to backend
     console.log('Saving settings:', settings);
     setSaved(true);
     setTimeout(() => setSaved(false), 3000);
   };
 
   const handleReset = () => {
-    // Reset to default settings
     setSettings({
       notifications: {
         email: true,
@@ -116,7 +114,7 @@ const Settings = () => {
 
   return (
     <Container maxWidth="xl" sx={{ mt: 2, mb: 4 }}>
-      {/* Header */}
+      {}
       <Box sx={{ mb: 4 }}>
         <Typography variant="h3" component="h1" gutterBottom sx={{ fontWeight: 700 }}>
           System Settings
@@ -133,7 +131,7 @@ const Settings = () => {
       )}
 
       <Grid container spacing={3}>
-        {/* AI Model Configuration */}
+        {}
         <Grid item xs={12} lg={6}>
           <Card>
             <CardHeader
@@ -212,7 +210,7 @@ const Settings = () => {
           </Card>
         </Grid>
 
-        {/* Alert Thresholds */}
+        {}
         <Grid item xs={12} lg={6}>
           <Card>
             <CardHeader
@@ -279,7 +277,7 @@ const Settings = () => {
           </Card>
         </Grid>
 
-        {/* Notifications */}
+        {}
         <Grid item xs={12} lg={6}>
           <Card>
             <CardHeader
@@ -343,7 +341,7 @@ const Settings = () => {
           </Card>
         </Grid>
 
-        {/* System Preferences */}
+        {}
         <Grid item xs={12} lg={6}>
           <Card>
             <CardHeader
@@ -412,7 +410,7 @@ const Settings = () => {
           </Card>
         </Grid>
 
-        {/* System Status */}
+        {}
         <Grid item xs={12}>
           <Card>
             <CardHeader
@@ -483,7 +481,7 @@ const Settings = () => {
           </Card>
         </Grid>
 
-        {/* Action Buttons */}
+        {}
         <Grid item xs={12}>
           <Card>
             <CardContent>
@@ -518,3 +516,4 @@ const Settings = () => {
 };
 
 export default Settings;
+
