@@ -1,9 +1,4 @@
-/**
- * AI Model Service
- * 
- * This service provides integration with Python-based AI models for tide prediction,
- * alert threshold optimization, and pattern analysis.
- */
+
 
 import { spawn } from 'child_process';
 import path from 'path';
@@ -25,10 +20,7 @@ const ALERT_PATTERN_SCRIPT = path.join(ANALYSIS_DIR, 'alert_pattern_analysis.py'
 // Flag to track if environment has been verified
 let environmentVerified = false;
 
-/**
- * Verify Python environment and required dependencies
- * @returns {Promise<boolean>} - True if environment is ready
- */
+
 async function verifyPythonEnvironment() {
   if (environmentVerified) return true;
   
@@ -72,12 +64,7 @@ async function verifyPythonEnvironment() {
   }
 }
 
-/**
- * Generate tide predictions for the specified number of hours
- * @param {Number} hours - Number of hours to predict
- * @param {String} stationId - Optional station ID for location-specific predictions
- * @returns {Promise<Array>} - Array of tide predictions
- */
+
 async function generateTidePredictions(hours = 24, stationId = null) {
   try {
     // For testing purposes, generate mock predictions
@@ -112,10 +99,7 @@ async function generateTidePredictions(hours = 24, stationId = null) {
   }
 }
 
-/**
- * Get optimized alert thresholds based on historical data
- * @returns {Promise<Object>} - Optimized thresholds
- */
+
 async function getOptimizedThresholds() {
   try {
     // For testing purposes, return mock optimized thresholds
@@ -134,12 +118,7 @@ async function getOptimizedThresholds() {
   }
 }
 
-/**
- * Analyze tide data for patterns and anomalies
- * @param {String} stationId - Station ID to analyze
- * @param {Number} days - Number of days of data to analyze
- * @returns {Promise<Object>} - Analysis results
- */
+
 async function analyzeTideData(stationId, days = 7) {
   try {
     // For testing purposes, return mock analysis
@@ -153,14 +132,14 @@ async function analyzeTideData(stationId, days = 7) {
       return { timestamp: timestamp.toISOString(), height, stationId };
     });
     
-    // Calculate basic statistics
+    
     const heights = tideData.map(reading => reading.height);
     const avg = heights.reduce((sum, h) => sum + h, 0) / heights.length;
     const max = Math.max(...heights);
     const min = Math.min(...heights);
     const range = max - min;
     
-    // Check for anomalies (simple threshold-based detection)
+    
     const anomalies = tideData.filter(reading => {
       return Math.abs(reading.height - avg) > range * 0.4;
     });
@@ -193,10 +172,7 @@ async function analyzeTideData(stationId, days = 7) {
  */
 async function analyzeAlertPatterns(days = 30) {
   try {
-    // For testing purposes, return mock analysis
-    // In production, this would call the Python model
     
-    // Generate mock alert data
     const alertTypes = ['HIGH_TIDE', 'STORM_SURGE', 'COASTAL_FLOODING', 'WIND_SPEED', 'RAINFALL', 'TURBIDITY'];
     const severities = ['low', 'medium', 'high'];
     
@@ -212,19 +188,19 @@ async function analyzeAlertPatterns(days = 30) {
       };
     });
     
-    // Count alerts by type
+   
     const typeCount = {};
     alertData.forEach(alert => {
       typeCount[alert.type] = (typeCount[alert.type] || 0) + 1;
     });
     
-    // Count alerts by severity
+    
     const severityCount = {};
     alertData.forEach(alert => {
       severityCount[alert.severity] = (severityCount[alert.severity] || 0) + 1;
     });
     
-    // Calculate acknowledgment rate
+   
     const acknowledged = alertData.filter(a => a.acknowledged).length;
     const ackRate = (acknowledged / alertData.length) * 100;
     
@@ -246,12 +222,7 @@ async function analyzeAlertPatterns(days = 30) {
   }
 }
 
-/**
- * Run a Python script with the specified arguments
- * @param {String} scriptPath - Path to the Python script
- * @param {Array} args - Arguments to pass to the script
- * @returns {Promise<String>} - Script output
- */
+
 async function runPythonScript(scriptPath, args = []) {
   return new Promise((resolve, reject) => {
     try {
@@ -271,40 +242,40 @@ async function runPythonScript(scriptPath, args = []) {
         }
       }, 5 * 60 * 1000);
       
-      // Spawn Python process
+     
       const pythonProcess = spawn(pythonExecutable, [scriptPath, ...args]);
       
       let output = '';
       let errorOutput = '';
       
-      // Collect stdout
+     
       pythonProcess.stdout.on('data', (data) => {
         output += data.toString();
       });
       
-      // Collect stderr
+      
       pythonProcess.stderr.on('data', (data) => {
         errorOutput += data.toString();
       });
       
-      // Handle process completion
+      
       pythonProcess.on('close', (code) => {
         clearTimeout(timeout);
         if (code !== 0) {
           return reject(new Error(`Python script exited with code ${code}: ${errorOutput}`));
         }
         
-        // Try to parse JSON output if possible
+       
         try {
           const jsonOutput = JSON.parse(output);
           resolve(jsonOutput);
         } catch (e) {
-          // If not JSON, return raw output
+          
           resolve(output);
         }
       });
       
-      // Handle process errors
+     
       pythonProcess.on('error', (error) => {
         clearTimeout(timeout);
         reject(new Error(`Failed to execute Python script: ${error.message}`));
