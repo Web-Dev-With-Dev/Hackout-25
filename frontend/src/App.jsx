@@ -38,7 +38,7 @@ import {
 import { ThemeProvider, createTheme } from '@mui/material/styles'
 import './App.css'
 
-// Import components
+
 import Dashboard from './components/Dashboard'
 import PredictionDashboard from './components/PredictionDashboard'
 import ThreatMap from './components/ThreatMap'
@@ -47,50 +47,50 @@ import Settings from './components/Settings'
 import ErrorBoundary from './components/ErrorBoundary'
 import MobileAlerts from './components/MobileAlerts'
 
-// Create a brilliant, 3D-enhanced white theme with vibrant color palettes
+
 const theme = createTheme({
   palette: {
     mode: 'light',
     primary: {
-      main: '#6366f1', // Indigo
+      main: '#6366f1', 
       light: '#818cf8',
       dark: '#4f46e5'
     },
     secondary: {
-      main: '#06b6d4', // Cyan
+      main: '#06b6d4', 
       light: '#22d3ee',
       dark: '#0891b2'
     },
     background: {
-      default: '#f8fafc', // Slate 50
-      paper: '#ffffff' // Pure White
+      default: '#f8fafc', 
+      paper: '#ffffff' 
     },
     surface: {
-      main: '#f1f5f9', // Slate 100
-      light: '#e2e8f0', // Slate 200
-      dark: '#cbd5e1' // Slate 300
+      main: '#f1f5f9', 
+      light: '#e2e8f0', 
+      dark: '#cbd5e1' 
     },
     text: {
-      primary: '#0f172a', // Slate 900
-      secondary: '#475569' // Slate 600
+      primary: '#0f172a', 
+      secondary: '#475569' 
     },
     warning: {
-      main: '#f59e0b', // Amber 500
+      main: '#f59e0b', 
       light: '#fbbf24',
       dark: '#d97706'
     },
     error: {
-      main: '#ef4444', // Red 500
+      main: '#ef4444', 
       light: '#f87171',
       dark: '#dc2626'
     },
     success: {
-      main: '#10b981', // Emerald 500
+      main: '#10b981', 
       light: '#34d399',
       dark: '#059669'
     },
     info: {
-      main: '#3b82f6', // Blue 500
+      main: '#3b82f6', 
       light: '#60a5fa',
       dark: '#2563eb'
     },
@@ -409,7 +409,7 @@ function Navigation({ drawerOpen, toggleDrawer, menuItems }) {
 
 function App() {
   const [drawerOpen, setDrawerOpen] = useState(false)
-  const [alertCount, setAlertCount] = useState(3) // Mock alert count
+  const [alertCount, setAlertCount] = useState(3) 
   const [notifications, setNotifications] = useState([
     {
       id: 1,
