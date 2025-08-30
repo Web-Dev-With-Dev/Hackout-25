@@ -16,7 +16,6 @@ const DebugInfo = () => {
         apiStatus: 'unknown'
       };
 
-      // Check if components can be imported
       try {
         const Dashboard = await import('./Dashboard.jsx');
         info.componentsLoaded.push('Dashboard');
@@ -52,7 +51,6 @@ const DebugInfo = () => {
         info.errors.push(`Settings: ${error.message}`);
       }
 
-      // Check API status
       try {
         const response = await fetch('http://localhost:5003/api/test');
         if (response.ok) {
@@ -108,3 +106,4 @@ const DebugInfo = () => {
 };
 
 export default DebugInfo;
+
