@@ -12,10 +12,8 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report, confusion_matrix
 
-# Add the parent directory to sys.path to import from backend
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-# Function to load data
 def load_data(from_csv=True, csv_path='alert_analysis_data.csv'):
     """
     Load alert and tide data either from MongoDB or from a CSV file
@@ -29,14 +27,12 @@ def load_data(from_csv=True, csv_path='alert_analysis_data.csv'):
             return create_sample_data()
     else:
         try:
-            # Try to import MongoDB models
             from backend.models.Reading import Reading
             from backend.models.Alert import Alert
             from backend.models.Station import Station
             import mongoose
             import json
             
-            # Connect to MongoDB
             with open('../backend/.env') as f:
                 for line in f:
                     if line.startswith('MONGODB_URI='):
@@ -45,12 +41,10 @@ def load_data(from_csv=True, csv_path='alert_analysis_data.csv'):
             
             mongoose.connect(mongodb_uri)
             
-            # Get alerts and readings from MongoDB
             alerts = Alert.find().sort('ts', -1).limit(1000)
             readings = Reading.find().sort('ts', -1).limit(5000)
             stations = {station._id: station for station in Station.find()}
             
-            # Convert to DataFrames
             alert_data = []
             for alert in alerts:
                 alert_data.append({
@@ -83,7 +77,6 @@ def load_data(from_csv=True, csv_path='alert_analysis_data.csv'):
             alert_df = pd.DataFrame(alert_data)
             reading_df = pd.DataFrame(reading_data)
             
-            # Merge data to create a dataset with readings and alerts
             merged_data = pd.merge_asof(
                 reading_df.sort_values('ts'),
                 alert_df.sort_values('ts'),
@@ -93,10 +86,8 @@ def load_data(from_csv=True, csv_path='alert_analysis_data.csv'):
                 tolerance=pd.Timedelta('1h')
             )
             
-            # Create alert flag
             merged_data['has_alert'] = ~merged_data['alert_id'].isna()
             
-            # Save to CSV for future use
             merged_data.to_csv(csv_path, index=False)
             
             return merged_data
@@ -105,65 +96,50 @@ def load_data(from_csv=True, csv_path='alert_analysis_data.csv'):
             print("Creating sample data instead.")
             return create_sample_data()
 
-# Function to create sample data
 def create_sample_data(n_days=60, n_stations=3):
     """
     Create sample data for alert pattern analysis
     """
     np.random.seed(42)
     
-    # Create timestamps for the past n_days at 15-minute intervals
     end_time = pd.Timestamp.now()
     start_time = end_time - pd.Timedelta(days=n_days)
     timestamps = pd.date_range(start=start_time, end=end_time, freq='15min')
     
-    # Create station data
     stations = [
         {
             'stationId': f'station-{i+1}',
             'stationName': f'Station {i+1}',
-            # Random locations around the UK coast
             'latitude': 50.5 + np.random.rand() * 5,
             'longitude': -5.5 + np.random.rand() * 5
         } for i in range(n_stations)
     ]
     
-    # Create alert types
     alert_types = ['HIGH_TIDE', 'LOW_TIDE', 'RAPID_RISE', 'RAPID_FALL']
     alert_severities = ['low', 'medium', 'high']
     
-    # Create sample data
     data = []
     alert_id_counter = 1
     
     for station in stations:
-        # Create time values for sine waves
         time_values = np.linspace(0, 2*np.pi*n_days/2, len(timestamps))  # n_days/2 complete cycles
         
-        # Create primary tide pattern (semidiurnal with different amplitudes and phases)
         phase_offset = np.random.rand() * np.pi  # Random phase offset
         amplitude = 1.5 + np.random.rand() * 1.0  # Random amplitude between 1.5 and 2.5
         
-        # Main semidiurnal tide component
         heights = amplitude * np.sin(time_values + phase_offset)
         
-        # Add diurnal inequality (difference between consecutive high/low tides)
         heights += 0.3 * np.sin(time_values/2 + np.random.rand() * np.pi)
         
-        # Add a long-term trend (e.g., seasonal variation)
         heights += 0.5 * np.sin(time_values / (n_days/2) + np.random.rand() * np.pi)
         
-        # Add random noise
         heights += 0.1 * np.random.randn(len(timestamps))
         
-        # Add spring-neap cycle (approximately 14.77 days)
         spring_neap_factor = 0.4 * np.sin(time_values * (2/14.77) + np.random.rand() * np.pi)
         heights *= (1 + spring_neap_factor)
         
-        # Calculate rate of change
         rate_of_change = np.diff(heights, prepend=heights[0])
         
-        # Create alerts based on thresholds
         high_tide_threshold = 2.0
         low_tide_threshold = -0.5
         rapid_rise_threshold = 0.3
@@ -187,7 +163,6 @@ def create_sample_data(n_days=60, n_stations=3):
                 })
                 alert_id_counter += 1
             
-            # Low tide alert
             elif height < low_tide_threshold:
                 alerts.append({
                     'alert_id': f'alert-{alert_id_counter}',
@@ -202,7 +177,6 @@ def create_sample_data(n_days=60, n_stations=3):
                 })
                 alert_id_counter += 1
             
-            # Rapid rise alert
             elif roc > rapid_rise_threshold:
                 alerts.append({
                     'alert_id': f'alert-{alert_id_counter}',
@@ -217,7 +191,6 @@ def create_sample_data(n_days=60, n_stations=3):
                 })
                 alert_id_counter += 1
             
-            # Rapid fall alert
             elif roc < rapid_fall_threshold:
                 alerts.append({
                     'alert_id': f'alert-{alert_id_counter}',
@@ -232,7 +205,6 @@ def create_sample_data(n_days=60, n_stations=3):
                 })
                 alert_id_counter += 1
             
-            # Add reading data
             data.append({
                 'reading_id': f"{station['stationId']}-{i}",
                 'ts': ts,
@@ -245,8 +217,7 @@ def create_sample_data(n_days=60, n_stations=3):
                 'longitude': station['longitude'],
                 'has_alert': False  # Will be updated later
             })
-        
-        # Add alerts to data
+            
         for alert in alerts:
             # Find the closest reading by timestamp
             closest_idx = np.argmin(np.abs([(ts - alert['ts']).total_seconds() for ts in timestamps]))
@@ -261,24 +232,19 @@ def create_sample_data(n_days=60, n_stations=3):
             data[closest_idx]['kind'] = alert['kind']
             data[closest_idx]['area'] = alert['area']
     
-    # Convert to DataFrame
     df = pd.DataFrame(data)
     
-    # Save to CSV for future use
     df.to_csv('alert_analysis_data.csv', index=False)
     
     return df
 
-# Function to preprocess data
 def preprocess_data(data):
     """
     Preprocess the data for alert pattern analysis
     """
-    # Convert timestamp to datetime if it's not already
     if isinstance(data['ts'].iloc[0], str):
         data['ts'] = pd.to_datetime(data['ts'])
     
-    # Extract time-based features
     data['hour'] = data['ts'].dt.hour
     data['minute'] = data['ts'].dt.minute
     data['day_of_year'] = data['ts'].dt.dayofyear
@@ -286,15 +252,12 @@ def preprocess_data(data):
     data['day'] = data['ts'].dt.day
     data['day_of_week'] = data['ts'].dt.dayofweek
     
-    # Calculate time of day in decimal hours
     data['time_of_day'] = data['hour'] + data['minute'] / 60
     
-    # Calculate rate of change if not already present
     if 'rate_of_change' not in data.columns:
         data = data.sort_values(['stationId', 'ts'])
         data['rate_of_change'] = data.groupby('stationId')['height'].diff()
     
-    # Calculate rolling statistics
     data['height_rolling_mean'] = data.groupby('stationId')['height'].transform(
         lambda x: x.rolling(window=24, min_periods=1).mean()
     )
@@ -302,145 +265,110 @@ def preprocess_data(data):
         lambda x: x.rolling(window=24, min_periods=1).std()
     )
     
-    # Calculate z-score
     data['height_zscore'] = (data['height'] - data['height_rolling_mean']) / data['height_rolling_std'].replace(0, 1)
     
-    # Drop rows with NaN values
     data = data.dropna()
     
     return data
 
-# Function to analyze alert frequency
 def analyze_alert_frequency(data):
     """
     Analyze the frequency of alerts by type, station, and time
     """
-    # Create output directory
     os.makedirs('visualizations', exist_ok=True)
     
-    # Filter data with alerts
     alert_data = data[data['has_alert'] == True].copy()
     
-    # Count alerts by type
     alert_counts_by_type = alert_data.groupby('alert_type').size().reset_index(name='count')
     
-    # Create figure
     plt.figure(figsize=(10, 6))
     
-    # Create bar chart
     sns.barplot(x='alert_type', y='count', data=alert_counts_by_type)
     
-    # Add labels and title
     plt.xlabel('Alert Type')
     plt.ylabel('Count')
     plt.title('Alert Frequency by Type')
     plt.xticks(rotation=45)
     
-    # Save figure
     plt.tight_layout()
     plt.savefig('visualizations/alert_frequency_by_type.png')
     plt.close()
     
-    # Count alerts by station
     alert_counts_by_station = alert_data.groupby('stationName').size().reset_index(name='count')
     
-    # Create figure
     plt.figure(figsize=(10, 6))
     
-    # Create bar chart
     sns.barplot(x='stationName', y='count', data=alert_counts_by_station)
     
-    # Add labels and title
     plt.xlabel('Station')
     plt.ylabel('Count')
     plt.title('Alert Frequency by Station')
     plt.xticks(rotation=45)
     
-    # Save figure
     plt.tight_layout()
     plt.savefig('visualizations/alert_frequency_by_station.png')
     plt.close()
     
-    # Count alerts by hour of day
     alert_counts_by_hour = alert_data.groupby('hour').size().reset_index(name='count')
     
-    # Create figure
     plt.figure(figsize=(12, 6))
     
-    # Create bar chart
     sns.barplot(x='hour', y='count', data=alert_counts_by_hour)
     
-    # Add labels and title
     plt.xlabel('Hour of Day')
     plt.ylabel('Count')
     plt.title('Alert Frequency by Hour of Day')
     
-    # Save figure
     plt.tight_layout()
     plt.savefig('visualizations/alert_frequency_by_hour.png')
     plt.close()
     
-    # Count alerts by day of week
     day_names = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
     alert_data['day_name'] = alert_data['day_of_week'].apply(lambda x: day_names[x])
     alert_counts_by_day = alert_data.groupby('day_name').size().reset_index(name='count')
     
-    # Reorder days
     alert_counts_by_day['day_order'] = alert_counts_by_day['day_name'].apply(lambda x: day_names.index(x))
     alert_counts_by_day = alert_counts_by_day.sort_values('day_order')
     
-    # Create figure
     plt.figure(figsize=(10, 6))
     
-    # Create bar chart
     sns.barplot(x='day_name', y='count', data=alert_counts_by_day, order=day_names)
     
-    # Add labels and title
     plt.xlabel('Day of Week')
     plt.ylabel('Count')
     plt.title('Alert Frequency by Day of Week')
     
-    # Save figure
     plt.tight_layout()
     plt.savefig('visualizations/alert_frequency_by_day.png')
     plt.close()
     
-    # Count alerts by month
     month_names = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
     alert_data['month_name'] = alert_data['month'].apply(lambda x: month_names[x-1])
     alert_counts_by_month = alert_data.groupby('month_name').size().reset_index(name='count')
     
-    # Reorder months
     alert_counts_by_month['month_order'] = alert_counts_by_month['month_name'].apply(lambda x: month_names.index(x))
     alert_counts_by_month = alert_counts_by_month.sort_values('month_order')
     
-    # Create figure
     plt.figure(figsize=(10, 6))
     
-    # Create bar chart
     sns.barplot(x='month_name', y='count', data=alert_counts_by_month, order=month_names)
     
-    # Add labels and title
     plt.xlabel('Month')
     plt.ylabel('Count')
     plt.title('Alert Frequency by Month')
     
-    # Save figure
     plt.tight_layout()
     plt.savefig('visualizations/alert_frequency_by_month.png')
     plt.close()
     
     print("Alert frequency analysis visualizations saved")
 
-# Function to analyze alert distribution
 def analyze_alert_distribution(data):
     """
     Analyze the distribution of alerts by tide height and rate of change
     """
-    # Create output directory
     os.makedirs('visualizations', exist_ok=True)
     
-    # Create figure
     plt.figure(figsize=(12, 8))
     
     # Create scatter plot
