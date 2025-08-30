@@ -43,7 +43,6 @@ const TideChart = ({ readings, loading, stationId }) => {
     if (!data || data.length === 0) return [];
     
     return data.map(item => {
-      // Handle both historical readings and predictions
       const timestamp = item.timestamp || item.ts || Date.now();
       const height = item.height || (item.metrics ? item.metrics.tideHeight : 0) || 0;
       
@@ -61,7 +60,6 @@ const TideChart = ({ readings, loading, stationId }) => {
   
   const displayData = viewMode === 'historical' ? formattedReadings : formattedPredictions;
   
-  // Sort data by timestamp and ensure all data is valid
   if (displayData && displayData.length > 0) {
     displayData.sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
   }
@@ -74,7 +72,6 @@ const TideChart = ({ readings, loading, stationId }) => {
     );
   }
 
-  // Check if we have valid data to display
   if (!displayData || displayData.length === 0) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
