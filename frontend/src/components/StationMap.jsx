@@ -6,7 +6,6 @@ import L from 'leaflet';
 import api from '../services/api';
 import { format } from 'date-fns';
 
-// Fix for Leaflet marker icons
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png',
@@ -14,7 +13,6 @@ L.Icon.Default.mergeOptions({
   shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
 });
 
-// Store Google Maps API key for future use
 const googleMapsApiKey = 'AIzaSyAOVYRIgupAurZup5y1PRh8Ismb1A3lLao';
 
 const getSeverityColor = (severity) => {
@@ -30,16 +28,14 @@ const getSeverityColor = (severity) => {
   }
 };
 
-// Function to get color based on wind speed
 const getWindSpeedColor = (windSpeed) => {
-  if (windSpeed >= 18) return '#ff0000'; // Red for very high wind
-  if (windSpeed >= 14) return '#ff6600'; // Orange for high wind
-  if (windSpeed >= 10) return '#ffcc00'; // Yellow for moderate wind
-  if (windSpeed >= 6) return '#66cc00';  // Light green for light wind
-  return '#009900';                      // Dark green for very light wind
+  if (windSpeed >= 18) return '#ff0000'; 
+  if (windSpeed >= 14) return '#ff6600'; 
+  if (windSpeed >= 10) return '#ffcc00';
+  if (windSpeed >= 6) return '#66cc00'; 
+  return '#009900';                      
 };
 
-// Function to get wind intensity label based on wind speed
 const getWindIntensityLabel = (windSpeed) => {
   if (windSpeed >= 18) return 'Very High';
   if (windSpeed >= 14) return 'High';
@@ -53,10 +49,9 @@ const getWindIntensityLabel = (windSpeed) => {
 const StationMap = ({ stations, alerts }) => {
   const [selectedLocation, setSelectedLocation] = useState('');
   const [mapCenter, setMapCenter] = useState(null);
-  const [timeFilter, setTimeFilter] = useState(24); // Default to 24 hours
+  const [timeFilter, setTimeFilter] = useState(24); 
   const [currentTime, setCurrentTime] = useState(new Date());
   
-  // Update current time every minute
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentTime(new Date());
@@ -64,7 +59,6 @@ const StationMap = ({ stations, alerts }) => {
     return () => clearInterval(timer);
   }, []);
   
-  // Component to change map view when location changes
 const ChangeMapView = ({ center }) => {
   const map = useMap();
   useEffect(() => {
@@ -99,9 +93,8 @@ const ChangeMapView = ({ center }) => {
     setTimeFilter(newValue);
   };
 
-  // Calculate map center based on stations
   const calculateCenter = () => {
-    if (stations.length === 0) return [34.0522, -118.2437]; // Default to Los Angeles
+    if (stations.length === 0) return [34.0522, -118.2437]; 
     
     const lats = stations.map(station => station.location.lat);
     const lngs = stations.map(station => station.location.lng);
@@ -112,7 +105,6 @@ const ChangeMapView = ({ center }) => {
     return [centerLat, centerLng];
   };
 
-  // Find active alerts for each station
   const getStationAlerts = (stationId) => {
     return alerts.filter(alert => alert.stationId === stationId && !alert.acknowledged);
   };
@@ -199,10 +191,10 @@ const ChangeMapView = ({ center }) => {
                   </Popup>
                 </Marker>
                 
-                {/* Wind speed indicator circle */}
+                {}
                 <Circle
                   center={[station.location.lat, station.location.lng]}
-                  radius={3000} // 3km radius
+                  radius={3000} 
                   pathOptions={{
                     color: getWindSpeedColor(station.avgWindSpeed || 10),
                     fillColor: getWindSpeedColor(station.avgWindSpeed || 10),
@@ -224,7 +216,7 @@ const ChangeMapView = ({ center }) => {
                   <Circle
                     key={alert.id}
                     center={[station.location.lat, station.location.lng]}
-                    radius={2000} // 2km radius
+                    radius={2000}
                     pathOptions={{
                       color: getSeverityColor(alert.severity),
                       fillColor: getSeverityColor(alert.severity),
