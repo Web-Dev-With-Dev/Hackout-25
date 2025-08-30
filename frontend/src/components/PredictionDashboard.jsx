@@ -87,7 +87,6 @@ const PredictionDashboard = () => {
       }
     } catch (error) {
       console.error('Error fetching stations:', error);
-      // Fallback to mock data if API fails
       const mockStations = [
         { id: '1', name: 'Mumbai Coastal Station' },
         { id: '2', name: 'Chennai Coastal Station' },
@@ -139,7 +138,6 @@ const PredictionDashboard = () => {
       setPatterns(patternsData);
     } catch (error) {
       console.error('Error fetching AI data:', error);
-      // Set fallback data if everything fails
       setPredictions(generateMockPredictions());
       setAnalysis({
         avgHighTide: 2.1,
@@ -176,7 +174,6 @@ const PredictionDashboard = () => {
     }
   };
 
-  // Enhanced mock data for better visualizations
   const enhancedPredictions = React.useMemo(() => {
     try {
       return predictions.length > 0 ? predictions : generateMockPredictions();
@@ -321,12 +318,11 @@ const PredictionDashboard = () => {
     );
   }
 
-  // Error boundary for rendering
   try {
   
   return (
     <Container maxWidth="xl" sx={{ mt: 2, mb: 4 }}>
-      {/* Enhanced Header Section with 3D Effects */}
+      {}
       <Box sx={{ 
         mb: 4, 
         p: 4, 
@@ -366,7 +362,7 @@ const PredictionDashboard = () => {
           Advanced machine learning models for coastal threat forecasting
         </Typography>
         
-        {/* Enhanced AI Status Bar */}
+        {}
         <Card sx={{ 
           mt: 3, 
           background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.95) 100%)',
@@ -421,7 +417,7 @@ const PredictionDashboard = () => {
       </Box>
       
       <Grid container spacing={3}>
-        {/* AI Model Performance */}
+        {}
         <Grid item xs={12}>
           <Card>
             <CardHeader
@@ -459,7 +455,7 @@ const PredictionDashboard = () => {
           </Card>
         </Grid>
 
-        {/* Tide Predictions */}
+        {}
         <Grid item xs={12} lg={8}>
           <Card sx={{ 
             height: { xs: 'auto', md: '600px' },
@@ -494,7 +490,7 @@ const PredictionDashboard = () => {
           </Card>
         </Grid>
         
-        {/* Prediction Confidence */}
+        {}
         <Grid item xs={12} lg={4}>
           <Card sx={{ 
             height: { xs: 'auto', md: '600px' },
@@ -520,7 +516,7 @@ const PredictionDashboard = () => {
           </Card>
         </Grid>
         
-        {/* Anomaly Detection */}
+        {}
         <Grid item xs={12} md={6}>
           <Card>
             <CardHeader
@@ -559,7 +555,7 @@ const PredictionDashboard = () => {
           </Card>
         </Grid>
 
-        {/* Tide Analysis */}
+        {}
         <Grid item xs={12} md={6}>
           <Card>
             <CardHeader
@@ -625,7 +621,7 @@ const PredictionDashboard = () => {
           </Card>
         </Grid>
         
-        {/* Alert Patterns */}
+        {}
         <Grid item xs={12}>
           <Card>
             <CardHeader
