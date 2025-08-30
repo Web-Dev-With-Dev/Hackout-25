@@ -42,7 +42,6 @@ const EnhancedTideChart = ({ readings = [], loading = false }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
-  // Generate comprehensive historical data with realistic patterns
   const generateHistoricalData = (days) => {
     const data = [];
     const now = new Date();
@@ -53,7 +52,6 @@ const EnhancedTideChart = ({ readings = [], loading = false }) => {
       const hour = date.getHours();
       const dayOfYear = Math.floor((date - new Date(date.getFullYear(), 0, 0)) / (1000 * 60 * 60 * 24));
       
-      // Enhanced tide simulation with lunar cycle influence
       const lunarPhase = Math.sin((dayOfYear / 29.5) * 2 * Math.PI) * 0.3;
       const tideLevel = baseTide + 
         Math.sin((hour - 6) * Math.PI / 12) * 1.2 + 
@@ -61,27 +59,22 @@ const EnhancedTideChart = ({ readings = [], loading = false }) => {
         lunarPhase +
         (Math.random() - 0.5) * 0.2;
       
-      // Enhanced seasonal variations with monsoon influence
       const seasonalFactor = 1 + 
         Math.sin((date.getMonth() + 1) * Math.PI / 6) * 0.2 +
         Math.sin((dayOfYear / 365) * 2 * Math.PI) * 0.15;
       
-      // Weather impact simulation with storm events
       const stormProbability = Math.random();
       const weatherImpact = stormProbability > 0.95 ? (Math.random() - 0.5) * 1.0 : 
                            stormProbability > 0.9 ? (Math.random() - 0.5) * 0.5 : 0;
       
       const finalTideLevel = Math.max(0, tideLevel * seasonalFactor + weatherImpact);
       
-      // Enhanced wave height calculation
       const windSpeed = Math.random() * 30 + 5;
       const waveHeight = Math.max(0.5, 
         finalTideLevel * 0.3 + 
         windSpeed * 0.1 + 
         Math.random() * 1.5
       );
-      
-      // Enhanced current speed with tidal influence
       const currentSpeed = Math.max(0.5, 
         Math.sin((hour - 3) * Math.PI / 12) * 2 + 
         Math.random() * 1.5
@@ -130,7 +123,6 @@ const EnhancedTideChart = ({ readings = [], loading = false }) => {
     }
   };
 
-  // Calculate statistics with safe defaults
   const stats = historicalData.length > 0 ? {
     avgTide: (historicalData.reduce((sum, d) => sum + (d.tide || 0), 0) / historicalData.length).toFixed(2),
     maxTide: Math.max(...historicalData.map(d => d.tide || 0)).toFixed(2),
@@ -151,22 +143,18 @@ const EnhancedTideChart = ({ readings = [], loading = false }) => {
     lunarInfluence: '0.000'
   };
 
-  // Format data for different chart types
   const getChartData = () => {
-    // Safety check - ensure historicalData exists and has items
     if (!historicalData || historicalData.length === 0) {
       return [];
     }
     
     if (timeRange === '1d') {
-      // For 1 day, show hourly data
-      return historicalData.filter((_, index) => index % 4 === 0); // Every 4 hours
+      return historicalData.filter((_, index) => index % 4 === 0); 
     }
     if (timeRange === '7d') {
-      // For 7 days, show daily averages
       const dailyData = {};
       historicalData.forEach(d => {
-        if (!d || !d.date) return; // Skip invalid data
+        if (!d || !d.date) return; 
         
         const date = d.date;
         if (!dailyData[date]) {
@@ -184,7 +172,6 @@ const EnhancedTideChart = ({ readings = [], loading = false }) => {
         currentSpeed: parseFloat((d.currents.reduce((a, b) => a + b, 0) / d.currents.length).toFixed(2))
       }));
     }
-    // For 30d and 90d, show weekly averages
     return historicalData.filter((_, index) => index % 7 === 0).map(d => ({
       date: d.date || 'Unknown',
       tide: d.tide || 0,
@@ -196,7 +183,6 @@ const EnhancedTideChart = ({ readings = [], loading = false }) => {
   const renderChart = () => {
     const data = getChartData();
     
-    // Safety check - if no data, show empty chart
     if (!data || data.length === 0) {
       return (
         <Box sx={{ 
@@ -362,7 +348,7 @@ const EnhancedTideChart = ({ readings = [], loading = false }) => {
 
   return (
     <Box sx={{ height: '100%' }}>
-      {/* Controls */}
+      {}
       <Box sx={{ mb: 3 }}>
         <Grid container spacing={2} alignItems="center">
           <Grid item xs={12} md={6}>
@@ -432,7 +418,7 @@ const EnhancedTideChart = ({ readings = [], loading = false }) => {
         </Grid>
       </Box>
 
-      {/* Statistics Cards */}
+      {}
       <Box sx={{ mb: 3 }}>
         <Grid container spacing={2}>
           <Grid item xs={6} sm={4} md={2}>
@@ -566,7 +552,7 @@ const EnhancedTideChart = ({ readings = [], loading = false }) => {
             </Paper>
           </Grid>
           
-          {/* Additional Statistics Row */}
+          {}
           <Grid item xs={6} sm={4} md={2}>
             <Paper sx={{ 
               p: 2, 
@@ -601,14 +587,14 @@ const EnhancedTideChart = ({ readings = [], loading = false }) => {
         </Grid>
       </Box>
 
-      {/* Main Chart */}
+      {}
       <Box sx={{ height: 'calc(100% - 200px)', minHeight: 400 }}>
         <ResponsiveContainer width="100%" height="100%">
           {renderChart()}
         </ResponsiveContainer>
       </Box>
 
-      {/* Trend Analysis */}
+      {}
       <Box sx={{ mt: 3 }}>
         <Typography variant="h6" sx={{ fontWeight: 600, mb: 2, textAlign: 'center' }}>
           Historical Trend Analysis
@@ -684,7 +670,7 @@ const EnhancedTideChart = ({ readings = [], loading = false }) => {
         </Grid>
       </Box>
 
-      {/* Legend */}
+      {}
       <Box sx={{ mt: 3, textAlign: 'center' }}>
         <Typography variant="caption" color="text.secondary">
           <WaterIcon sx={{ fontSize: 16, verticalAlign: 'middle', mr: 1 }} />
@@ -696,3 +682,4 @@ const EnhancedTideChart = ({ readings = [], loading = false }) => {
 };
 
 export default EnhancedTideChart;
+
