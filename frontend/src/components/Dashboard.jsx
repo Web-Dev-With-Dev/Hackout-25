@@ -71,8 +71,6 @@ const Dashboard = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        
-        // Fetch alerts, stations, and readings in parallel with fallback data
         const [alertsData, stationsData, readingsData] = await Promise.all([
           api.getAlerts().catch(err => {
             console.error('Error fetching alerts:', err);
@@ -125,14 +123,10 @@ const Dashboard = () => {
     };
 
     fetchData();
-    
-    // Refresh data every 5 minutes
     const intervalId = setInterval(fetchData, 5 * 60 * 1000);
     
     return () => clearInterval(intervalId);
   }, []);
-
-  // Mock data for enhanced visualizations
   const threatData = [
     { name: 'Storm Surge', value: 45, color: '#ff6b35' },
     { name: 'High Tide', value: 30, color: '#00d4ff' },
@@ -176,7 +170,7 @@ const Dashboard = () => {
 
   return (
     <Container maxWidth="xl" sx={{ mt: 3, mb: 4 }}>
-      {/* Modern Header Section */}
+      {}
       <Box sx={{ mb: 4 }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 3, mb: 2 }}>
           <Box sx={{ 
@@ -209,7 +203,7 @@ const Dashboard = () => {
           </Box>
         </Box>
         
-        {/* Enhanced AI Status Bar */}
+        {}
         <Paper sx={{ 
           p: 3, 
           background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(236, 72, 153, 0.1) 100%)',
@@ -274,9 +268,9 @@ const Dashboard = () => {
         </MuiAlert>
       )}
       
-      {/* Main Dashboard Grid */}
+      {}
       <Grid container spacing={4}>
-        {/* AI Performance Metrics - Top Row */}
+        {}
         <Grid item xs={12}>
           <Card sx={{ 
             background: 'linear-gradient(135deg, rgba(26, 26, 26, 0.95) 0%, rgba(42, 42, 42, 0.95) 100%)',
@@ -364,7 +358,7 @@ const Dashboard = () => {
           </Card>
         </Grid>
 
-        {/* Main Content Row - Map and Alerts */}
+        {}
         <Grid item xs={12} lg={8}>
           <Card sx={{ 
             height: { xs: '500px', md: '700px' },
@@ -416,7 +410,7 @@ const Dashboard = () => {
           </Card>
         </Grid>
         
-        {/* Recent Alerts */}
+        {}
         <Grid item xs={12} lg={4}>
           <Card sx={{ 
             height: { xs: '500px', md: '700px' },
@@ -464,7 +458,7 @@ const Dashboard = () => {
           </Card>
         </Grid>
         
-        {/* Charts Row */}
+        {}
         <Grid item xs={12} md={6}>
           <Card sx={{ 
             height: { xs: '400px', md: '500px' },
@@ -515,7 +509,7 @@ const Dashboard = () => {
           </Card>
         </Grid>
 
-        {/* Performance Trends */}
+        {}
         <Grid item xs={12} md={6}>
           <Card sx={{ 
             height: { xs: '400px', md: '500px' },
@@ -588,7 +582,7 @@ const Dashboard = () => {
           </Card>
         </Grid>
         
-        {/* Enhanced Historical Tide Chart - Full Width */}
+        {}
         <Grid item xs={12}>
           <Card sx={{ 
             height: { xs: '600px', md: '800px' },
