@@ -1,0 +1,717 @@
+/* Elite Coastle Alert System Styles */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* 3D Animations and Keyframes */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes rainbowFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes float3D {
+  0%, 100% {
+    transform: translateZ(0px) translateY(0px) rotateX(0deg);
+  }
+  50% {
+    transform: translateZ(20px) translateY(-10px) rotateX(5deg);
+  }
+}
+
+@keyframes pulse3D {
+  0% {
+    transform: scale(1) translateZ(0px);
+    box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.7);
+  }
+  70% {
+    transform: scale(1.05) translateZ(10px);
+    box-shadow: 0 0 0 20px rgba(139, 92, 246, 0);
+  }
+  100% {
+    transform: scale(1) translateZ(0px);
+    box-shadow: 0 0 0 0 rgba(139, 92, 246, 0);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) rotateX(0deg);
+  }
+  50% {
+    transform: translateY(-10px) rotateX(5deg);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(0, 212, 255, 0.7);
+  }
+  70% {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 10px rgba(0, 212, 255, 0);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(0, 212, 255, 0);
+  }
+}
+
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(0, 212, 255, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.8), 0 0 30px rgba(0, 212, 255, 0.6);
+  }
+}
+
+@keyframes rotate3D {
+  0% {
+    transform: perspective(1000px) rotateY(0deg);
+  }
+  100% {
+    transform: perspective(1000px) rotateY(360deg);
+  }
+}
+
+@keyframes slideInFromLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px) rotateY(-15deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) rotateY(0deg);
+  }
+}
+
+@keyframes slideInFromRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px) rotateY(15deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) rotateY(0deg);
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: radial-gradient(ellipse at center, #f8fafc 0%, #f1f5f9 70%, #e2e8f0 100%);
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(99, 102, 241, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(6, 182, 212, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(251, 191, 36, 0.03) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(99, 102, 241, 0.3);
+  border-radius: 4px;
+  transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(99, 102, 241, 0.5);
+}
+
+/* Enhanced 3D Card animations */
+.MuiCard-root {
+  background: linear-gradient(135deg, rgba(26, 26, 26, 0.95) 0%, rgba(42, 42, 42, 0.95) 100%);
+  border: 2px solid rgba(139, 92, 246, 0.2);
+  backdrop-filter: blur(30px);
+  border-radius: 24px;
+  box-shadow: 
+    0 16px 64px rgba(0, 0, 0, 0.4),
+    0 8px 32px rgba(139, 92, 246, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  perspective: 1000px;
+  animation: slideInFromLeft 0.8s ease-out;
+}
+
+.MuiCard-root:nth-child(even) {
+  animation: slideInFromRight 0.8s ease-out;
+}
+
+.MuiCard-root::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #8b5cf6, #06b6d4, #fbbf24, #ec4899);
+  background-size: 200% 100%;
+  animation: rainbowFlow 3s ease-in-out infinite;
+  z-index: 1;
+}
+
+.MuiCard-root:hover::before {
+  left: 100%;
+}
+
+.MuiCard-root::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left 0.5s ease;
+}
+
+.MuiCard-root:hover::before {
+  left: 100%;
+}
+
+.MuiCard-root:hover {
+  transform: translateY(-12px) rotateX(5deg) rotateY(3deg) translateZ(20px);
+  box-shadow: 
+    0 32px 80px rgba(0, 0, 0, 0.5),
+    0 16px 48px rgba(139, 92, 246, 0.4),
+    0 8px 24px rgba(6, 182, 212, 0.3);
+  animation: float3D 3s ease-in-out infinite;
+  border-color: rgba(139, 92, 246, 0.4);
+}
+
+/* Enhanced 3D Button animations */
+.MuiButton-root {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.9) 0%, rgba(6, 182, 212, 0.9) 100%);
+  border: 2px solid rgba(139, 92, 246, 0.3);
+  backdrop-filter: blur(20px);
+  border-radius: 16px;
+  box-shadow: 
+    0 8px 32px rgba(139, 92, 246, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+.MuiButton-root::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.6s ease, height 0.6s ease;
+}
+
+.MuiButton-root:hover {
+  transform: translateY(-4px) translateZ(10px) scale(1.02);
+  box-shadow: 
+    0 16px 48px rgba(139, 92, 246, 0.4),
+    0 8px 24px rgba(6, 182, 212, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  border-color: rgba(139, 92, 246, 0.5);
+  animation: pulse3D 2s ease-in-out infinite;
+}
+
+.MuiButton-root:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+/* Enhanced 3D Chip animations */
+.MuiChip-root {
+  background: linear-gradient(135deg, rgba(26, 26, 26, 0.9) 0%, rgba(42, 42, 42, 0.9) 100%);
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  backdrop-filter: blur(20px);
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(139, 92, 246, 0.2);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+.MuiChip-root:hover {
+  transform: translateY(-2px) translateZ(5px) scale(1.05);
+  box-shadow: 0 8px 24px rgba(139, 92, 246, 0.4);
+  border-color: rgba(139, 92, 246, 0.4);
+  animation: pulse3D 1.5s ease-in-out infinite;
+}
+
+/* Enhanced 3D Icon animations */
+.MuiSvgIcon-root {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.MuiIconButton-root {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+.MuiIconButton-root:hover {
+  transform: translateY(-2px) translateZ(5px) scale(1.05);
+  box-shadow: 0 8px 24px rgba(139, 92, 246, 0.3);
+}
+
+.MuiIconButton-root:hover .MuiSvgIcon-root {
+  transform: scale(1.1) rotateY(10deg);
+  filter: drop-shadow(0 4px 8px rgba(139, 92, 246, 0.5));
+}
+
+/* Enhanced 3D Navigation animations */
+.MuiListItem-root {
+  background: linear-gradient(135deg, rgba(26, 26, 26, 0.8) 0%, rgba(42, 42, 42, 0.8) 100%);
+  border: 1px solid rgba(139, 92, 246, 0.1);
+  backdrop-filter: blur(20px);
+  border-radius: 16px;
+  margin: 8px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+.MuiListItem-root:hover {
+  transform: translateX(8px) translateZ(10px) scale(1.02);
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(6, 182, 212, 0.1) 100%);
+  border-color: rgba(139, 92, 246, 0.3);
+  box-shadow: 0 8px 24px rgba(139, 92, 246, 0.3);
+}
+
+/* Enhanced 3D Paper/Container styling */
+.MuiPaper-root {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.95) 100%) !important;
+  border: 2px solid rgba(99, 102, 241, 0.2) !important;
+  backdrop-filter: blur(20px) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), 0 4px 16px rgba(99, 102, 241, 0.2) !important;
+  color: #0f172a !important;
+}
+
+/* Enhanced 3D Form Controls */
+.MuiFormControl-root {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(248, 250, 252, 0.8) 100%);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  border-radius: 12px;
+  backdrop-filter: blur(20px);
+}
+
+.MuiInputLabel-root {
+  color: #475569 !important;
+}
+
+.MuiOutlinedInput-root {
+  color: #0f172a !important;
+}
+
+.MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
+  border-color: rgba(99, 102, 241, 0.3) !important;
+}
+
+.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: rgba(99, 102, 241, 0.5) !important;
+}
+
+.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: rgba(99, 102, 241, 0.7) !important;
+}
+
+/* Enhanced 3D Toggle Buttons */
+.MuiToggleButton-root {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 250, 252, 0.9) 100%) !important;
+  border: 1px solid rgba(99, 102, 241, 0.2) !important;
+  color: #475569 !important;
+  backdrop-filter: blur(20px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+.MuiToggleButton-root:hover {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(6, 182, 212, 0.1) 100%) !important;
+  border-color: rgba(99, 102, 241, 0.4) !important;
+  transform: translateY(-2px) translateZ(5px);
+  box-shadow: 0 8px 24px rgba(99, 102, 241, 0.3);
+}
+
+.MuiToggleButton-root.Mui-selected {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.3) 0%, rgba(6, 182, 212, 0.3) 100%) !important;
+  border-color: rgba(99, 102, 241, 0.6) !important;
+  color: #0f172a !important;
+  box-shadow: 0 4px 16px rgba(99, 102, 241, 0.4);
+}
+
+/* Enhanced 3D Menu Items */
+.MuiMenuItem-root {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 250, 252, 0.9) 100%) !important;
+  color: #0f172a !important;
+  border: 1px solid rgba(99, 102, 241, 0.1);
+  backdrop-filter: blur(20px);
+  transition: all 0.3s ease;
+}
+
+.MuiMenuItem-root:hover {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(6, 182, 212, 0.1) 100%) !important;
+  border-color: rgba(99, 102, 241, 0.3);
+  transform: translateX(4px);
+}
+
+/* Enhanced 3D Select Dropdown */
+.MuiSelect-select {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.95) 100%) !important;
+  color: #0f172a !important;
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  backdrop-filter: blur(20px);
+}
+
+/* Enhanced 3D Alert Styling */
+.MuiAlert-root {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.95) 100%) !important;
+  border: 2px solid rgba(99, 102, 241, 0.2) !important;
+  backdrop-filter: blur(20px) !important;
+  color: #0f172a !important;
+}
+
+/* Enhanced 3D Progress Indicators */
+.MuiLinearProgress-root {
+  background: rgba(248, 250, 252, 0.5) !important;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.MuiLinearProgress-bar {
+  background: linear-gradient(90deg, #6366f1, #06b6d4, #fbbf24) !important;
+  background-size: 200% 100%;
+  animation: rainbowFlow 2s ease-in-out infinite;
+}
+
+/* Enhanced 3D Circular Progress */
+.MuiCircularProgress-root {
+  color: #6366f1 !important;
+  filter: drop-shadow(0 4px 8px rgba(99, 102, 241, 0.3));
+}
+
+/* Enhanced 3D Divider */
+.MuiDivider-root {
+  background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.3), transparent) !important;
+  height: 2px;
+  border-radius: 1px;
+}
+
+.MuiListItem-root:hover {
+  transform: translateX(8px);
+}
+
+/* Map customizations */
+.leaflet-container {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.leaflet-popup-content-wrapper {
+  background: rgba(19, 47, 76, 0.95);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: white;
+}
+
+.leaflet-popup-tip {
+  background: rgba(19, 47, 76, 0.95);
+}
+
+.leaflet-tooltip {
+  background: rgba(19, 47, 76, 0.95);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  color: white;
+  font-size: 12px;
+  padding: 6px 10px;
+}
+
+/* Custom marker animations */
+.custom-marker {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Station marker */
+.station-marker {
+  animation: glow 3s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+  from {
+    box-shadow: 0 0 5px rgba(0, 212, 255, 0.5);
+  }
+  to {
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.8);
+  }
+}
+
+/* Loading animations */
+.MuiLinearProgress-root {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.MuiLinearProgress-bar {
+  background: linear-gradient(90deg, #00d4ff, #0099cc);
+}
+
+/* Chart customizations */
+.recharts-wrapper {
+  font-family: 'Inter', sans-serif;
+}
+
+.recharts-tooltip-wrapper {
+  background: rgba(19, 47, 76, 0.95);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: white;
+}
+
+/* Alert animations */
+.MuiAlert-root {
+  animation: slideIn 0.5s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Drawer animations */
+.MuiDrawer-paper {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* App bar glow effect */
+.MuiAppBar-root {
+  position: relative;
+}
+
+.MuiAppBar-root::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.5), transparent);
+}
+
+/* Typography enhancements */
+.MuiTypography-h1,
+.MuiTypography-h2,
+.MuiTypography-h3 {
+  background: linear-gradient(135deg, #ffffff 0%, #b2bac2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Card header enhancements */
+.MuiCardHeader-root {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.MuiCardHeader-title {
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+
+/* Switch customizations */
+.MuiSwitch-root {
+  transition: all 0.3s ease;
+}
+
+.MuiSwitch-root:hover {
+  transform: scale(1.05);
+}
+
+/* Slider customizations */
+.MuiSlider-root {
+  color: #00d4ff;
+}
+
+.MuiSlider-track {
+  background: linear-gradient(90deg, #00d4ff, #0099cc);
+}
+
+.MuiSlider-thumb {
+  box-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+}
+
+/* TextField customizations */
+.MuiTextField-root .MuiOutlinedInput-root {
+  transition: all 0.3s ease;
+}
+
+.MuiTextField-root .MuiOutlinedInput-root:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 212, 255, 0.2);
+}
+
+/* Badge animations */
+.MuiBadge-badge {
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-4px);
+  }
+  60% {
+    transform: translateY(-2px);
+  }
+}
+
+/* Enhanced Responsive design */
+@media (max-width: 768px) {
+  .MuiCard-root:hover {
+    transform: translateY(-4px) !important;
+    animation: none !important;
+  }
+  
+  .MuiListItem-root:hover {
+    transform: translateX(4px) !important;
+  }
+  
+  .MuiButton-root:hover::before {
+    width: 0;
+    height: 0;
+  }
+  
+  /* Mobile-specific animations */
+  .MuiCard-root {
+    animation: slideInFromLeft 0.4s ease-out !important;
+  }
+  
+  .MuiCard-root:nth-child(even) {
+    animation: slideInFromRight 0.4s ease-out !important;
+  }
+}
+
+/* Large screen enhancements */
+@media (min-width: 1200px) {
+  .MuiCard-root {
+    animation: slideInFromLeft 0.8s ease-out;
+  }
+  
+  .MuiCard-root:nth-child(even) {
+    animation: slideInFromRight 0.8s ease-out;
+  }
+  
+  .MuiCard-root:hover {
+    transform: translateY(-12px) rotateX(8deg) rotateY(4deg) !important;
+    box-shadow: 0 25px 50px rgba(0, 212, 255, 0.4) !important;
+  }
+}
+
+/* Dark theme enhancements */
+[data-mui-color-scheme="dark"] {
+  color-scheme: dark;
+}
+
+/* Focus states */
+.MuiButton-root:focus-visible,
+.MuiIconButton-root:focus-visible,
+.MuiListItem-root:focus-visible {
+  outline: 2px solid #00d4ff;
+  outline-offset: 2px;
+}
+
+/* Print styles */
+@media print {
+  .MuiAppBar-root,
+  .MuiDrawer-root,
+  .MuiIconButton-root {
+    display: none !important;
+  }
+  
+  .MuiCard-root {
+    box-shadow: none !important;
+    border: 1px solid #ccc !important;
+  }
+}
