@@ -23,7 +23,6 @@ import {
   FormControlLabel,
   Switch
 } from '@mui/material';
-// Import coastalLocations
 import { coastalLocations } from '../../../backend/data/coastalLocations';
 import {
   Warning as WarningIcon,
@@ -39,7 +38,6 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import api from '../services/api';
 
-// Fix for default markers in react-leaflet
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png',
@@ -47,7 +45,6 @@ L.Icon.Default.mergeOptions({
   shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
 });
 
-// Custom icons for different threat types
 const createCustomIcon = (type, severity) => {
   const colors = {
     high: '#f44336',
@@ -84,7 +81,7 @@ const ThreatMap = () => {
   const [stations, setStations] = useState([]);
   const [alerts, setAlerts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [mapCenter, setMapCenter] = useState([19.076, 72.8777]); // Mumbai
+  const [mapCenter, setMapCenter] = useState([19.076, 72.8777]); 
   const [zoom, setZoom] = useState(10);
   const [mapInstance, setMapInstance] = useState(null);
   const [userLocation, setUserLocation] = useState(null);
@@ -102,12 +99,12 @@ const ThreatMap = () => {
     weather: false,
     naturalActivities: false
   });
-  const [weatherLayerType, setWeatherLayerType] = useState('temp_new'); // Options: temp_new, precipitation_new, clouds_new
+  const [weatherLayerType, setWeatherLayerType] = useState('temp_new'); 
   const [autoCenterEnabled, setAutoCenterEnabled] = useState(true);
   const [locationWatchId, setLocationWatchId] = useState(null);
 
   const calculateDistance = (lat1, lon1, lat2, lon2) => {
-    const R = 6371; // Earth's radius in km
+    const R = 6371; 
     const dLat = (lat2 - lat1) * Math.PI / 180;
     const dLon = (lon2 - lon1) * Math.PI / 180;
     const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
@@ -131,17 +128,13 @@ const ThreatMap = () => {
 
     return { location: nearest, distance: minDistance };
   };
-
-  // Handle map initialization
   const onMapCreated = (map) => {
     setMapInstance(map);
     map.invalidateSize();
   };
 
-  // Fetch weather data for a specific location
   const fetchWeatherData = async (lat, lng) => {
     try {
-      // Using OpenWeatherMap API with a free API key
       const response = await fetch(
         `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lng}&units=metric&appid=bd5e378503939ddaee76f12ad7a97608`
       );
@@ -152,7 +145,6 @@ const ThreatMap = () => {
     }
   };
 
-  // Fetch tide data for natural activities
   const fetchTideData = async (lat, lng) => {
     try {
       const response = await fetch(`/api/tides?lat=${lat}&lng=${lng}`);
@@ -208,12 +200,10 @@ const ThreatMap = () => {
               }
             ];
           }),
-          // Fetch coastal locations data from backend
           fetch('/api/coastal-locations')
             .then(response => response.ok ? response.json() : null)
             .catch(err => {
               console.error('Error fetching coastal locations:', err);
-              // Fallback to local file if API fails
               return fetch('/backend/data/coastalLocations.js')
                 .then(response => response.ok ? response.json() : [])
                 .catch(() => [])
@@ -227,7 +217,6 @@ const ThreatMap = () => {
           { id: '3', name: 'Versova Beach', country: 'India', lat: 19.1351, lng: 72.8146, avgWindSpeed: 12 }
         ]);
         
-        // Fetch initial weather data for map center
         fetchWeatherData(mapCenter[0], mapCenter[1]);
       } catch (error) {
         console.error('Error fetching map data:', error);
@@ -313,7 +302,6 @@ const ThreatMap = () => {
           const nearest = findNearestCoastalLocation(latitude, longitude);
           setNearestCoastalLocation(nearest);
           
-          // Fetch weather data for user location periodically
           if (filters.weather) {
             fetchWeatherData(latitude, longitude);
           }
@@ -333,7 +321,6 @@ const ThreatMap = () => {
     }
   };
   
-  // Clean up geolocation watch on component unmount
   useEffect(() => {
     return () => {
       if (locationWatchId !== null) {
@@ -342,8 +329,6 @@ const ThreatMap = () => {
       }
     };
   }, [locationWatchId]);
-
-  // Weather layer radio buttons component - extracted to avoid conditional hook rendering
   const WeatherLayerOptions = () => (
     <Box sx={{ pl: 3, mt: 0.5, mb: 1 }}>
       <FormGroup row>
@@ -435,7 +420,7 @@ const ThreatMap = () => {
           </Box>
         )}
         
-        {/* CSS Animation for Rainbow Flow */}
+        {}
         <style>
           {`
             @keyframes rainbowFlow {
@@ -734,7 +719,7 @@ const ThreatMap = () => {
                   attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 />
                 
-                {/* Weather Map Layer */}
+                {}
                 {showWeatherLayer && (
                   <TileLayer
                     url={`https://tile.openweathermap.org/map/${weatherLayerType}/{z}/{x}/{y}.png?appid=bd5e378503939ddaee76f12ad7a97608`}
@@ -743,13 +728,13 @@ const ThreatMap = () => {
                   />
                 )}
 
-                {/* User Location Marker with Pulsing Effect */}
+                {}
                 {userLocation && (
                   <>
-                    {/* Accuracy circle */}
+                    {}
                     <Circle
                       center={userLocation}
-                      radius={50} // Approximate accuracy radius in meters
+                      radius={50} 
                       pathOptions={{
                         color: '#4285F4',
                         fillColor: '#4285F4',
@@ -758,7 +743,7 @@ const ThreatMap = () => {
                       }}
                     />
                     
-                    {/* User location marker */}
+                    {}
                     <Marker 
                       position={userLocation}
                       icon={L.divIcon({
@@ -797,7 +782,7 @@ const ThreatMap = () => {
                             "></div>
                           </div>
                         `,
-                        iconSize: [0, 0], // Size set to 0 as we're using absolute positioning
+                        iconSize: [0, 0], 
                         iconAnchor: [0, 0]
                       })}
                     >
@@ -847,7 +832,7 @@ const ThreatMap = () => {
                   </>
                 )}
                 
-                {/* Map Markers for Stations */}
+                {}
                 {stations.filter(station => station.lat && station.lng).map((station) => (
                   <Marker
                     key={station._id || station.id}
@@ -886,11 +871,10 @@ const ThreatMap = () => {
                   </Marker>
                 ))}
                 
-                {/* Seacoast Locations */}
+                {}
                 {filters.seacoast && seacoastLocations
                   .filter(location => location.lat && location.lng)
                   .map(location => {
-                    // Generate consistent natural activity data based on location id
                     const locationSeed = parseInt(location.id) || location.name.charCodeAt(0);
                     const tideLevel = ['Very Low', 'Low', 'Medium', 'High', 'Very High'][locationSeed % 5];
                     const currentSpeed = (1 + (locationSeed % 7) * 0.7).toFixed(1);
@@ -955,7 +939,7 @@ const ThreatMap = () => {
                     );
                   })}
                 
-                {/* Threat Circles and Markers */}
+                {}
                 {filteredAlerts.filter(alert => alert.center && alert.center.lat && alert.center.lng).map((alert) => (
                   <React.Fragment key={alert._id || alert.id}>
                     <Circle
@@ -1021,5 +1005,6 @@ const ThreatMap = () => {
     </Container>
   );
 };
+
 
 export default ThreatMap;
